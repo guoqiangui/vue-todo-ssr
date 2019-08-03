@@ -14,7 +14,8 @@ const config = {
   entry: path.join(__dirname, '../client/index.js'),
   output: {
     filename: 'bundle.js',
-    path: path.join(__dirname, '../dist')
+    path: path.join(__dirname, '../dist'),
+    publicPath: '/public/'  // 可以理解成htmlPlugin打包输出的路径
   },
   module: {
     rules: [{

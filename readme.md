@@ -73,6 +73,7 @@ eslink可以给代码定义一个规范、一个代码风格
 在`package.json`中配置`lint-fix`脚本用来自动修复检查到的错误
 > 好多错误，不知道怎么解决
 如果想要修改一个文件后自动检查eslint，需要`eslint-loader`和`babel-eslint`
+ps: eslint太麻烦了，我决定不使用
 
 ### `.editorconfig`
 根目录中加入`.editorconfig`文件用来解决不同的编辑器的各种风格不同的问题
@@ -83,5 +84,87 @@ eslink可以给代码定义一个规范、一个代码风格
 要求安装之前该目录为git仓库，即`git init`初始化过
 
 ## webpack4升级
-ps: 终于可以解决之前的bug了
 * 补安装一个`webpack-cli`
+
+## 学习vue框架的准备
+学习一门框架之前，必须先过一遍api，不然出了问题就不知道用哪个api解决它。
+
+### vue的版本之间的区别
+runtime版本不可以在Vue实例中写`template`选项
+
+### vue实例
+快速过一遍官网的api
+
+### vue的生命周期
+vue的生命周期骑士就是Vue实例的生命周期。
+如果想对DOM进行操作，可以在`mounted`中进行。
+如果相对数据进行操作，最早可以放在`created`里。
+
+### computed和watch
+不到万不得已，不要使用computed的set功能。
+watch更多是去监听某个数据变化，然后做某些操作
+watch里面的deep选项是用于监听对应的对象内部的变化，直接这样监听消耗较大，可以将监听的目标写成字符串：
+```javascript
+watch: {
+  // 这样就是监听obj对象的a属性了
+  'obj.a': (new, old) => {}
+}
+```
+
+### vue的指令
+使用`v-bind:style`绑定内联样式的时候，vue会帮我们自动添加浏览器前缀。
+例如`appearance`会变成`-webkit-appearance`
+`v-for`也可以遍历对象，有三个参数，分别是value, key, index
+使用`v-for`的时候，需要指定key，不推荐使用index当作key，有可能会错乱
+
+### vue组件
+#### 组件的定义
+声明`props`的属性的时候可以使用驼峰命名，在html中使用的时候就建议换成横杠连接符的形式了
+props单向数据流：子组件内部不应该修改父组件传过来的props。如果确实要修改，可以触发自定义事件，通知父组件修改
+ref：是对节点的引用，如果是html节点，就返回该节点的DOM对象；如果是vue组件，就返回该vue实例
+子组件可以通过`this.$parent`访问父组件的实例，千万不要通过这样的方式来修改父组件的内容，后期会搞不清楚逻辑。
+
+#### 组件的extend
+可以利用extend来扩展组件
+
+#### 自定义组件实现v-model
+例如实现一个自定义输入框myinput，需要内部的input的props定义value，并且触发一个input自定义事件；
+然后父组件在使用myinput的时候就可以用v-model去绑定一个数据了，v-model内部帮我们绑定了value和input
+额外的，如果想v-model绑定的不是value属性和input事件，也可以做到。在子组件声明model选项，如下:
+```js
+const component = {
+  // 在model选项中指定要绑定的属性和事件
+  model: {
+    prop: 'myvalue',
+    event: 'myinput'
+  }
+}
+```
+
+#### 越级访问祖先组件
+子组件通过`this.$parent`可以访问到父组件，但如果想访问父组件的父组件呢？这时祖先组件定义provide选项，后代组件定义inject选项（和props类似），即可配合完成，如下：
+```js
+// 祖先组件
+new Vue({
+  // 和data类似，需要定义方法，但不会响应式变化
+  provide() {
+    return {
+      value: this.value
+    }
+  }
+})
+
+// 后代组件
+const component = {
+  inject: ['value']
+}
+```
+
+#### render方法
+我们写好的template会编译成一个render方法。
+这个render方法渲染出来的是虚拟DOM，存储在内存中，会与真正的DOM进行对比，如果需要更新，就会把虚拟DOM转换成真实DOM，再渲染到页面上。
+
+### vue-router
+默认使用hash模式，就是带#的，但是搜索引擎不会收录这一部分的内容。可以在创建Router实例的时候传入mode选项，取值为history即可开启history模式。
+history模式很不错，就是不能刷新，开发环境要解决需要配置devServer选项中的historyApiFallback，生产环境需要配置服务器。
+通过`this.$route`可以获取当前路由的信息，也可以在路由的配置中加入props选项，这样路由的参数就可以作为props传入到路由对应的组件中。

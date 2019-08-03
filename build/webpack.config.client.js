@@ -26,7 +26,12 @@ const devServer = {
   overlay: {
     errors: true // webpack编译过程中有错误的话，将错误显示到网页上
   },
-  hot: true // 改了一个组件的代码，就只更新页面该处部分
+  hot: true, // 改了一个组件的代码，就只更新页面该处部分
+  historyApiFallback: {
+    // 解决开发环境中history模式无法刷新问题（将404页面修改成主页）
+    // 这个路径和base配置中的publicPath有关，是根据publicPath的路径为根路径的
+    index: '/public/index.html'
+  }
 }
 
 let config

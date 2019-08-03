@@ -1,27 +1,28 @@
 <template>
   <section class="todo-container">
     <!-- 输入框 -->
-    <input 
-      type="text" 
-      class="add-todo" 
-      autofocus 
-      placeholder="接下来要去做什么？" 
+    <input
+      type="text"
+      class="add-todo"
+      autofocus
+      placeholder="接下来要去做什么？"
       v-on:keyup.enter="addTodo"
     >
     <!-- todo项 -->
-    <todo-item 
-      v-for="todo in filteredTodos" 
-      v-bind:key="todo.id" 
+    <todo-item
+      v-for="todo in filteredTodos"
+      v-bind:key="todo.id"
       v-bind:todo="todo"
       v-on:deleteTodo="deleteTodo"
     ></todo-item>
     <!-- tab按钮 -->
-    <my-tabs 
+    <my-tabs
       v-bind:filter="filter"
-      v-bind:todos="todos" 
+      v-bind:todos="todos"
       v-on:toggle="toggleFilter"
       v-on:clearAllCompletedTodo="clearAllCompletedTodo"
     ></my-tabs>
+    <!-- <router-view></router-view> -->
   </section>
 </template>
 
@@ -91,10 +92,10 @@ export default {
 <style lang="stylus" scoped>
 .todo-container
   width 600px
-  margin 0 auto 
+  margin 0 auto
   box-shadow 0 0 5px #666
 
-  .add-todo 
+  .add-todo
     width 100%
     border none
     outline none

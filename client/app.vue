@@ -1,7 +1,11 @@
 <template>
   <div id="app">
     <my-header></my-header>
-    <my-todo></my-todo>
+    <router-link :to="{name: 'app'}">app</router-link>
+    <router-link to="/login">login</router-link>
+    <transition name="fade">
+      <router-view></router-view>
+    </transition>
     <my-footer></my-footer>
   </div>
 </template>
@@ -10,25 +14,23 @@
 import MyHeader from './layout/header.vue'
 // jsx文件引用方式也一样
 import MyFooter from './layout/footer.jsx'
-import MyTodo from './views/todo/todo.vue'
 
 export default {
   data() {
     return {
-      
+
     }
   },
   components: {
     'my-header': MyHeader,
     'my-footer': MyFooter,
-    'my-todo': MyTodo
   }
 }
 </script>
 
 <style lang="stylus" scoped>
   // 半透明遮罩层
-  #app 
+  #app
     position fixed
     top 0
     bottom 0
