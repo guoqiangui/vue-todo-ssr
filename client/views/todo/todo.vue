@@ -33,6 +33,9 @@ import MyTabs from './tabs.vue'
 let id = 0  // todo的id
 
 export default {
+  metaInfo: {
+    title: 'The Todo App'
+  },
   data() {
     return {
       todos: [],

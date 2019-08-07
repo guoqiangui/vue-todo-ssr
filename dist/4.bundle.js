@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[4],{23:function(t,e,n){"use strict";n.r(e);var s={},i=n(1),c=Object(i.a)(s,function(){this.$createElement;this._self._c;return this._m(0)},[function(){var t=this.$createElement,e=this._self._c||t;return e("div",[e("h1",[this._v("登录页")])])}],!1,null,"405adea4",null);e.default=c.exports}}]);

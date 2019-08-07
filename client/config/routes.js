@@ -1,5 +1,5 @@
-import Todo from '../views/todo/todo.vue'
-import Login from '../views/login/login.vue'
+// import Todo from '../views/todo/todo.vue'
+// import Login from '../views/login/login.vue'
 
 export default [
   {
@@ -8,7 +8,8 @@ export default [
   },
   {
     path: '/app',
-    component: Todo,
+    // 异步组件
+    component: () => import('../views/todo/todo.vue'),
     name: 'app', // 给路由命名
     // 用于保存页面的一些元信息，参照meta标签
     // 到时候要用可以取出来
@@ -26,6 +27,7 @@ export default [
   },
   {
     path: '/login',
-    component: Login
+    // component: Login
+    component: () => import('../views/login/login.vue')
   }
 ]

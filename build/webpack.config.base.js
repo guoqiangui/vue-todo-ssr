@@ -11,20 +11,21 @@ const isDev = process.env.NODE_ENV === 'development'
 const config = {
   mode: process.env.NODE_ENV || 'production',  // development || production
   target: 'web', // 为了适应webpack-dev-server，编译目标是web平台
-  entry: path.join(__dirname, '../client/index.js'),
+  entry: path.join(__dirname, '../client/client-entry.js'),
   output: {
     filename: 'bundle.js',
     path: path.join(__dirname, '../dist'),
-    publicPath: '/public/'  // 可以理解成htmlPlugin打包输出的路径
+    publicPath: 'http://127.0.0.1:8000/public/'  // 可以理解成htmlPlugin打包输出的路径
   },
   module: {
+    noParse: /es6-promise\.js$/, // avoid webpack shimming process
     rules: [{
       test: /\.vue$/,
       loader: 'vue-loader',
       options: createVueLoaderOptions(isDev)  // 因为导出的是方法
     }, {
       test: /\.jsx$/,
-      loader: 'babel-loader'
+      loader: 'babel-loader',
     }, {
       test: /\.(gif|jpg|jpeg|png|svg)/,
       use: [{

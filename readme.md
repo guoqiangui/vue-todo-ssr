@@ -168,3 +168,40 @@ const component = {
 默认使用hash模式，就是带#的，但是搜索引擎不会收录这一部分的内容。可以在创建Router实例的时候传入mode选项，取值为history即可开启history模式。
 history模式很不错，就是不能刷新，开发环境要解决需要配置devServer选项中的historyApiFallback，生产环境需要配置服务器。
 通过`this.$route`可以获取当前路由的信息，也可以在路由的配置中加入props选项，这样路由的参数就可以作为props传入到路由对应的组件中。
+
+#### 导航守卫
+像是一个拦截器一样，不过更像是一个钩子函数，每次路由跳转的不同阶段都会执行不同的守卫。
+用途：比如有些页面需要用户登录才可以访问，导航守卫就可以用来判断用户是否登录来决定是否让用户访问。
+
+#### 异步组件（路由懒加载）
+很多时候，没必要把所有页面的代码都加载出来，只需要在用到的时候加载对应的组件的代码就行了，这时就要用到异步组件。
+使用的话非常简单，在配置路由的地方把component选项修改一下即可，如下
+```js
+// 可能需要安装插件支持该语法：babel-plugin-syntax-dynamic-import（不过我没报错，老师报错了，我就不装了）
+{
+  path: '/app',
+  component: () => import('../views/todo/todo.vue')
+}
+```
+
+### Vuex
+考虑服务端渲染，每次依然不能导出同一个store，会造成内存溢出（store对象得不到删除）。
+getters可以理解为computed。
+commit方法只能传入两个参数，要传多个参数的话可以将它们包装成对象传入第二个参数。
+mutations只支持同步的代码，actions里面支持异步代码。
+
+#### Vuex模块
+模块还可以嵌套模块，不过要注意理清逻辑，否则会很乱。
+Vuex有动态加载模块的功能。
+Vuex默认不支持热更新，但可以通过一些配置开启，注意：热重启不支持state的热重启
+
+### Vue的服务端渲染
+开发阶段：有两个server，一个是webpack dev server，另一个是node server，node server用来渲染页面返回给用户。
+node server生成html页面，从webpack dev server中拿到bundle.js，组成一个完整的网页，返回给用户。
+生产环境：简单许多，因为dev server和node server需要的bundle.js已经打包完成，也不用启动dev server了，直接用node server生成html页面即可返回给用户。
+配置文件搞好之后，开始写node server，用到koa框架。
+要写服务端渲染，需要安装一个koa中间件：koa-router。顺便再安装两个插件：axios和memory-fs。memory-fs与node的fs用法基本一样，但memory-fs不会把文件存到磁盘中，会存到内存中，这样效率就会很快。
+`client/create-app.js`: 每次服务端渲染都需要渲染不同的app对象，所以每次渲染都要创建一个新的app。
+`nodemon`: 可以理解成支持修改服务端代码热重启。
+`concurrently`: 支持一次启动多个命令行的工具，避免每次都要启动server端和client端。
+`vue-meta`: 用来解决服务端渲染的时候，如何在没有DOM的情况下将meta信息放入到页面中。

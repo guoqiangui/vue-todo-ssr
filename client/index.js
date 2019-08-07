@@ -2,24 +2,26 @@
 
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import Vuex from 'vuex'
 import App from './app.vue'
 
 // import './assets/images/beijing.jpg'  // 连图片也可以import
 // import './assets/styles/test.styl'  // 引入stylus文件
 import './assets/styles/global.styl'
-
-// 使用vue-router
-Vue.use(VueRouter)
-
 import createRouter from './config/router'
-const router = createRouter()
+import createStore from './store/store'
 
-const root = document.createElement('div')
-document.body.appendChild(root)
+Vue.use(VueRouter)
+Vue.use(Vuex)
+
+const router = createRouter()
+const store = createStore()
+
+var div = document.createElement('div')
+document.body.appendChild(div)
 
 new Vue({
   router,
-  render: (h) => {
-    return h(App)
-  }
-}).$mount(root)
+  store,
+  render: h => h(App)
+}).$mount(div)

@@ -4,6 +4,7 @@ const htmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const baseConfig = require('./webpack.config.base.js')  // 引入公共配置
 const merge = require('webpack-merge')
+const VueClientPlugin = require('vue-server-renderer/client-plugin')
 
 // 是否为开发环境
 // package.json中自定义的scripts中的变量都会存储在process.env中
@@ -16,7 +17,8 @@ const defaultPlugins = [
       'NODE_ENV': isDev ? '"development"' : '"production"'
     }
   }),
-  new htmlWebpackPlugin()
+  new htmlWebpackPlugin(),
+  new VueClientPlugin()
 ]
 
 // webpack-dev-server的配置
@@ -72,6 +74,7 @@ if (isDev) {
       }),
       new webpack.HotModuleReplacementPlugin(), // 热更新
       // new webpack.NoEmitOnErrorsPlugin() // 减少错误信息的展示, webpack4中没有了
+      new VueClientPlugin(),
     ])
   })
 
